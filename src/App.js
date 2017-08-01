@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import * as BooksAPI from './BooksAPI';
 import BookShelf from './BookShelf';
+import Search from './Search';
 
 class BooksApp extends Component {
   state = {
-    /*
-      TODO: Maintain state of books here.
-
-    */    
     books : []
-
   };
 
   componentDidMount() {
@@ -22,38 +18,55 @@ class BooksApp extends Component {
   }
 
 updateBook = (book,newShelf) => {
-  console.log("Updated Book: " + book.title + newShelf);
+  BooksAPI.update(book,newShelf);
+  BooksAPI.getAll().then((books) => {
+    this.setState({ books: books});
+  });
 }
 
 
   render() {
-    return (
+    return (  //TODO: What's the deal with history.push ?
       <div className="app">
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>My Reads</h1>
-          </div>      
-          <Route exact path='/' render={() => (
-            <div className="list-books-content">
-              <BookShelf 
-                  books={this.state.books.filter((book)=> book.shelf === 'currentlyReading')}
-                  shelfTitle="Currently Reading"
-                  onUpdateBook={this.updateBook}
-              />
-              <BookShelf 
-                  books={this.state.books.filter((book) => book.shelf === 'wantToRead')}
-                  shelfTitle="Want to Read"
-                  onUpdateBook={this.updateBook}
-              />
-              <BookShelf 
-                  books={this.state.books.filter((book)=> book.shelf === 'read' )}
-                  shelfTitle="Read"
-                  onUpdateBook={this.updateBook}
-              />
-            </div>
-            )}
-          />          
-        </div>
+        <Route exact path='/search' render={() => (
+          <Search 
+            
+          />
+        )}/>
+
+
+        <Route exact path='/' render={() => (
+          <div className="list-books">
+            <div className="list-books-title">
+              <h1>My Reads</h1>
+            </div>      
+              <div className="list-books-content">
+                <BookShelf 
+                    books={this.state.books.filter((book)=> book.shelf === 'currentlyReading')}
+                    shelfTitle="Currently Reading"
+                    onUpdateBook={this.updateBook}
+                />
+                <BookShelf 
+                    books={this.state.books.filter((book) => book.shelf === 'wantToRead')}
+                    shelfTitle="Want to Read"
+                    onUpdateBook={this.updateBook}
+                />
+                <BookShelf 
+                    books={this.state.books.filter((book)=> book.shelf === 'read' )}
+                    shelfTitle="Read"
+                    onUpdateBook={this.updateBook}
+                />
+              </div>
+            <div className="open-search">
+              <Link 
+                  to='/search'
+              >
+              Add a book
+              </Link>
+            </div>        
+          </div>
+        )}/>
+
       </div>
     );
   }
