@@ -18,19 +18,20 @@ class BooksApp extends Component {
   }
 
 updateBook = (book,newShelf) => {
+  // TODO: update local state first and then send a request
   BooksAPI.update(book,newShelf);
-  BooksAPI.getAll().then((books) => {
-    this.setState({ books: books});
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books: books});
   });
 }
 
 
   render() {
-    return (  //TODO: What's the deal with history.push ?
+    return (  // TODO: What's the deal with history.push ?
       <div className="app">
         <Route exact path='/search' render={() => (
           <Search 
-            
+              onUpdateBook = {this.updateBook}
           />
         )}/>
 

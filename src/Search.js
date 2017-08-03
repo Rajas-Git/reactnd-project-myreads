@@ -18,11 +18,12 @@ class Search extends Component {
             console.log("query:" + query);
             BooksAPI.search(query,10).then((books) => {
                 //console.log(JSON.stringify(books));
-                if(! books.error ) {
-                    this.setState( {query: query.trim(), books: books });
+                if(books &&  books.error ) {
+                    this.setState( {query: query, books: [] });
+                    
                 }
                 else {
-                    this.setState( {query: query.trim(), books: [] });
+                    this.setState( {query: query, books: books });
                 }
             }); 
         }
@@ -35,7 +36,7 @@ class Search extends Component {
 
     render() {
         const { query } = this.state;
-
+        const { onUpdateBook } = this.props;
         return(
             <div className="search-books">
                 <div className="search-books-bar">
@@ -60,8 +61,8 @@ class Search extends Component {
                         {this.state.books.map((book, index) =>
                             <li key={index}>
                               <Book 
-                                book={book}
-                                //onUpdateBook={onUpdateBook}
+                                  book={book}
+                                  onUpdateBook={onUpdateBook}
                               />
                             </li>                        
                         )}                         

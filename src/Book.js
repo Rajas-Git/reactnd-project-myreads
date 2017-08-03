@@ -7,11 +7,11 @@ class Book extends Component {
         return(
             <div className="book" >
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }} />
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${ book.imageLinks? book.imageLinks.thumbnail : '' })` }} />
                     <div className="book-shelf-changer">
                         <select 
                             value={book.shelf}
-                            onChange={(event) => onUpdateBook(book,event.target.value)}
+                            onChange={(event) => onUpdateBook(book, event.target.value)}
                         >
                         <option value="none" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
@@ -22,7 +22,7 @@ class Book extends Component {
                     </div>
                 </div>  
                 <div className="book-title"> {book.title} </div>
-                <div className="book-authors"> {book.authors.map((author,index) => index>0? ', '+ author : author )} </div>                                   
+                <div className="book-authors"> {book.authors ? book.authors.join(", "): "" } </div>                                   
             </div>
         );
     }
