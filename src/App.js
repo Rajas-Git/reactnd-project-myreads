@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route, Link } from 'react-router-dom';
-import logo from './logo.svg';
 import './App.css';
 import * as BooksAPI from './BooksAPI';
 import BookShelf from './BookShelf';
@@ -13,28 +12,27 @@ class BooksApp extends Component {
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {      
-      this.setState({ books: books });
+      this.setState({ books });
     });
   }
 
-updateBook = (book,newShelf) => {
-  // TODO: update local state first and then send a request
-  BooksAPI.update(book,newShelf);
-    BooksAPI.getAll().then((books) => {
-      this.setState({ books: books});
-  });
-}
+  updateBook = (book,newShelf) => {
+    BooksAPI.update(book,newShelf).then(() => {
+      BooksAPI.getAll().then((books) => {
+        this.setState({ books });  
+      });  
+    });  
+  }
 
 
   render() {
-    return (  // TODO: What's the deal with history.push ?
+    return ( 
       <div className="app">
         <Route exact path='/search' render={() => (
           <Search 
               onUpdateBook = {this.updateBook}
           />
         )}/>
-
 
         <Route exact path='/' render={() => (
           <div className="list-books">

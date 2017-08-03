@@ -5,7 +5,9 @@ import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 
 class Search extends Component {
-
+    static propTypes = {
+        onUpdateBook: PropTypes.func.isRequired
+    }
 
     state = {
         query: '',
@@ -13,14 +15,10 @@ class Search extends Component {
     }
 
     updateQuery = (query) => {
-        console.log('query:' + query );
         if(query) { 
-            console.log("query:" + query);
             BooksAPI.search(query,10).then((books) => {
-                //console.log(JSON.stringify(books));
                 if(books &&  books.error ) {
-                    this.setState( {query: query, books: [] });
-                    
+                    this.setState( {query: query, books: [] });                    
                 }
                 else {
                     this.setState( {query: query, books: books });
@@ -28,8 +26,7 @@ class Search extends Component {
             }); 
         }
         else {
-          this.setState({query:'', books:[]});
-          console.log("queryELSE:" + query);
+          this.setState({query: '', books: []});          
         }
         
     }
@@ -37,6 +34,7 @@ class Search extends Component {
     render() {
         const { query } = this.state;
         const { onUpdateBook } = this.props;
+
         return(
             <div className="search-books">
                 <div className="search-books-bar">
@@ -67,7 +65,6 @@ class Search extends Component {
                             </li>                        
                         )}                         
                 </ol>
-
             </div>
         );
     }

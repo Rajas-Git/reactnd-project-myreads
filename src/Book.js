@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Book extends Component {
+    static propTypes = {
+        book: PropTypes.object.isRequired,
+        onUpdateBook: PropTypes.func.isRequired
+    }
+
 
     render() {
         const { book, onUpdateBook } = this.props;
@@ -21,8 +27,8 @@ class Book extends Component {
                         </select>
                     </div>
                 </div>  
-                <div className="book-title"> {book.title} </div>
-                <div className="book-authors"> {book.authors ? book.authors.join(", "): "" } </div>                                   
+                <div className="book-title"> {book.title? book.title : ""} </div>
+                <div className="book-authors"> {book.authors? book.authors.join(", ") : "" } </div>                                   
             </div>
         );
     }
