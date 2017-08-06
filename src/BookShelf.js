@@ -3,11 +3,12 @@ import './App.css';
 import PropTypes from 'prop-types';
 import Book from './Book';
 
+// component for a Book Shelf
 class BookShelf extends Component {
     static propTypes = {
         shelfTitle: PropTypes.string.isRequired,
         books: PropTypes.array.isRequired,
-        onUpdateBook: PropTypes.func.isRequired                
+        onUpdateBook: PropTypes.func.isRequired
     }
 
     render() {
@@ -21,12 +22,12 @@ class BookShelf extends Component {
                     <ol className="books-grid">
                         {books.map((book, index) =>
                             <li key={index}>
-                              <Book 
+                              <Book
                                 book={book}
                                 onUpdateBook={onUpdateBook}
                               />
-                            </li>                        
-                        )}                         
+                            </li>
+                        )}
                     </ol>
                     </div>
                 </div>

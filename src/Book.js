@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+// Component to display a single book
 class Book extends Component {
     static propTypes = {
         book: PropTypes.object.isRequired,
@@ -13,9 +14,9 @@ class Book extends Component {
         return(
             <div className="book" >
                 <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${ book.imageLinks? book.imageLinks.thumbnail : '' })` }} />
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${ book.imageLinks? book.imageLinks.thumbnail : "" })` }} />
                     <div className="book-shelf-changer">
-                        <select 
+                        <select
                             value={book.shelf}
                             onChange={(event) => onUpdateBook(book, event.target.value)}
                         >
@@ -26,9 +27,9 @@ class Book extends Component {
                         <option value="none">None</option>
                         </select>
                     </div>
-                </div>  
+                </div>
                 <div className="book-title"> {book.title? book.title : ""} </div>
-                <div className="book-authors"> {book.authors? book.authors.join(", ") : "" } </div>                                   
+                <div className="book-authors"> {book.authors? book.authors.join(", ") : "" } </div>
             </div>
         );
     }

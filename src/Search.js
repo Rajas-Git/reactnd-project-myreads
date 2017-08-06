@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book';
 
+// Component for Search page
 class Search extends Component {
     static propTypes = {
         onUpdateBook: PropTypes.func.isRequired,
-        currentBooksMap: PropTypes.object.isRequired
+        currentBooksMap: PropTypes.object.isRequired // map of books already added to any of the three shelves
     }
 
     state = {
@@ -15,6 +16,7 @@ class Search extends Component {
         books: []
     }
 
+    // function to get a uniq list of books as search API returns multiple books with same IDs
     getUniqBooks(books) {
         let outBooks = [];
         let idSet = new Set();
@@ -27,33 +29,34 @@ class Search extends Component {
         return outBooks;
     }
 
+    // event handler for search text field
     updateQuery = (query) => {
-        if(query !== "" ) { 
+        if(query !== "" ) {
             this.setState({ query });
 
             BooksAPI.search(query,10).then((books) => {
                 if(books &&  !books.error ) {
                     if(query === this.state.query) {
                         books = this.getUniqBooks(books);
-                        this.setState( { books: books });                                     
+                        this.setState( { books: books });
                     }
                 }
                 else {
-                    this.setState( {query: query, books: [] });   
+                    this.setState( {query: query, books: [] });
                 }
-            }); 
+            });
         }
         else {
-          this.setState({query: '', books: []});          
+          this.setState({query: '', books: []});
         }
-        
+
     }
 
     // Fix because search API reports inconsistent bookshelf when compared to getAll API
     getBook = (currentBooksMap, book) => {
         if (currentBooksMap.has(book.id)) {
             book.shelf = currentBooksMap.get(book.id);
-        } 
+        }
         else {
             book.shelf = "none";
         }
@@ -67,7 +70,7 @@ class Search extends Component {
         return(
             <div className="search-books">
                 <div className="search-books-bar">
-                    <Link 
+                    <Link
                         className="close-search"
                         to="/"
                     >
@@ -75,7 +78,7 @@ class Search extends Component {
                     </Link>
 
                     <div className="search-books-input-wrapper">
-                        <input 
+                        <input
                             type="text"
                             placeholder="Search by title or author"
                             value={query}
@@ -86,14 +89,14 @@ class Search extends Component {
 
                 <ol className="books-grid">
                         {this.state.books.map((book, index) =>
-                                                           
+
                             <li key={index}>
-                              <Book 
-                                  book={ this.getBook(currentBooksMap,book) }
+                              <Book
+                                  book={this.getBook(currentBooksMap,book)}
                                   onUpdateBook={onUpdateBook}
                               />
-                            </li>                        
-                        )}                         
+                            </li>
+                        )}
                 </ol>
             </div>
         );

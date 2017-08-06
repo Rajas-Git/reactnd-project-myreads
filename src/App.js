@@ -11,14 +11,14 @@ class BooksApp extends Component {
   };
 
   componentDidMount() {
-    BooksAPI.getAll().then((books) => {      
+    BooksAPI.getAll().then((books) => {
       this.setState({ books });
     });
   }
 
   updateBook = (modBook,newShelf) => {
     BooksAPI.update(modBook,newShelf).then(() => {
-      // Update the local state. getAll API is buggy (inconsistent) when compared to search API
+      // Update the local state. getAll API is buggy (gives inconsistent results for bookshelves for same books when compared to search API)
       modBook.shelf = newShelf;
       let books = this.state.books;
       for(let book of books) {
@@ -29,12 +29,11 @@ class BooksApp extends Component {
         }
       }
       this.setState({ books: books.concat(modBook)});
-      // BooksAPI.getAll().then((books) => {
-      //   this.setState({ books });  
-      // });  
-    });  
+    });
   }
 
+  // Function to get a map of book.id --> book.shelf
+  // Used to get a map of books added to any of the three shelves
   getBookMap = () => {
     let bookMap = new Map();
     if (this.state.books) {
@@ -46,12 +45,12 @@ class BooksApp extends Component {
   }
 
   render() {
-    return ( 
+    return (
       <div className="app">
         <Route exact path='/search' render={() => (
-          <Search 
+          <Search
               onUpdateBook = {this.updateBook}
-              currentBooksMap = {this.getBookMap()}
+              currentBooksMap = {this.getBookMap()} // pass a map of books added to any of the shelves
           />
         )}/>
 
@@ -59,31 +58,31 @@ class BooksApp extends Component {
           <div className="list-books">
             <div className="list-books-title">
               <h1>My Reads</h1>
-            </div>      
+            </div>
               <div className="list-books-content">
-                <BookShelf 
+                <BookShelf
                     books={this.state.books.filter((book)=> book.shelf === 'currentlyReading')}
                     shelfTitle="Currently Reading"
                     onUpdateBook={this.updateBook}
                 />
-                <BookShelf 
+                <BookShelf
                     books={this.state.books.filter((book) => book.shelf === 'wantToRead')}
                     shelfTitle="Want to Read"
                     onUpdateBook={this.updateBook}
                 />
-                <BookShelf 
+                <BookShelf
                     books={this.state.books.filter((book)=> book.shelf === 'read' )}
                     shelfTitle="Read"
                     onUpdateBook={this.updateBook}
                 />
               </div>
             <div className="open-search">
-              <Link 
+              <Link
                   to='/search'
               >
               Add a book
               </Link>
-            </div>        
+            </div>
           </div>
         )}/>
 
